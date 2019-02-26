@@ -8,4 +8,4 @@
 
 包含所有设计模式的总结
 
-[!一句话道清设计模式](./BriefDescription.md)
+[一句话道清设计模式](./BriefDescription.md)
