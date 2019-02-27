@@ -1,5 +1,3 @@
-# demos
-all useful demos for me
+# Android Apps
 
-# how to
-checkout branches to browse different kinds of demos
+此分支包含所有和Android Apps相关的demo
