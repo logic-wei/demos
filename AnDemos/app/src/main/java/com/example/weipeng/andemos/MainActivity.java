@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.weipeng.andemos.BroadcastDemo.BroadcastDemoActivity;
 import com.example.weipeng.andemos.ServiceDemo.ServiceDemoActivity;
 
 import java.util.ArrayList;
@@ -36,10 +37,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDemoMap() {
-        DemoActivity demoActivity;
+        List<DemoActivity> demoActivities = new ArrayList<>();
 
-        demoActivity = new ServiceDemoActivity();
-        mDemoMap.put(demoActivity.getDemoTitle(), demoActivity);
+        demoActivities.add(new ServiceDemoActivity());
+        demoActivities.add(new BroadcastDemoActivity());
+
+        for (DemoActivity activity: demoActivities) {
+            mDemoMap.put(activity.getDemoTitle(), activity);
+        }
     }
 
     private void initViews() {

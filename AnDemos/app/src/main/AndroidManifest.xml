@@ -24,7 +24,11 @@
             android:exported="true" />
         <service
             android:name=".ServiceDemo.MyIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".BroadcastDemo.BroadcastDemoActivity"
+            android:label="@string/title_activity_broadcast_demo"></activity>
     </application>
 
 </manifest>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AnDemos</string>
+    <string name="title_activity_broadcast_demo">BroadcastDemoActivity</string>
 </resources>
