@@ -14,23 +14,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.example.weipeng.andemos.ServiceDemo.ServiceDemoActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.zip.Inflater;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRView;
     private RViewAdapter mRVAdapter;
+    private HashMap<String, DemoActivity> mDemoMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initDemoMap();
         initViews();
+    }
+
+    private void initDemoMap() {
+        DemoActivity demoActivity;
+
+        demoActivity = new ServiceDemoActivity();
+        mDemoMap.put(demoActivity.getDemoTitle(), demoActivity);
     }
 
     private void initViews() {
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mRView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         // mRVAdapter setting
+        /*
         mRVAdapter.add("OpenGL", "OpenGL示例");
         mRVAdapter.add("Camera1", "Camera1示例");
         mRVAdapter.add("Camera2", "Camera2示例");
@@ -52,15 +62,22 @@ public class MainActivity extends AppCompatActivity {
         mRVAdapter.add("CustomView", "自定义控件示例");
         mRVAdapter.add("jni", "jni示例");
         mRVAdapter.add("service", "四大组件-service示例");
+        */
+        for (String key: mDemoMap.keySet()) {
+            DemoActivity activity = mDemoMap.get(key);
+            mRVAdapter.add(activity.getDemoTitle(), activity.getDemoContent());
+        }
         mRVAdapter.notifyDataSetChanged();
 
         mRVAdapter.setClickListener(new RViewAdapter.OnClickListener() {
             @Override
             public void onItemClicked(int index, String title) {
-                if (title.equals("OpenGL")) {
-                    Intent intent = new Intent();
-                    startActivity(intent);
+                if (!mDemoMap.containsKey(title)) {
+                    Toast.makeText(getBaseContext(), "no demo named " + title, Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                Intent intent = new Intent(getBaseContext(), mDemoMap.get(title).getClass());
+                startActivity(intent);
             }
         });
     }

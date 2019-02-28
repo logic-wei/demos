@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MyService:"/>
+        <Button
+            android:id="@+id/button_start_myservice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="启动"/>
+
+        <Button
+            android:id="@+id/button_stop_myservice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="停止" />
+
+        <Button
+            android:id="@+id/button_bind_myservice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="绑定"/>
+
+        <Button
+            android:id="@+id/button_unbind_myservice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="取消绑定"/>
+
+        <Button
+            android:id="@+id/button_call_binder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="调用binder代理对象"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MyIntentService:" />
+
+        <Button
+            android:id="@+id/button_start_myintentservice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="启动MyIntentService"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+</ScrollView>
