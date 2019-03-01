@@ -29,6 +29,9 @@
         <activity
             android:name=".BroadcastDemo.BroadcastDemoActivity"
             android:label="@string/title_activity_broadcast_demo"></activity>
+
+        <activity android:name=".DatabaseDemo.DatabaseDemoActivity">
+        </activity>
     </application>
 
 </manifest>
