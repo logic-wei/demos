@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weipeng.andemos.BroadcastDemo.BroadcastDemoActivity;
+import com.example.weipeng.andemos.DatabaseDemo.DatabaseDemoActivity;
 import com.example.weipeng.andemos.ServiceDemo.ServiceDemoActivity;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         demoActivities.add(new ServiceDemoActivity());
         demoActivities.add(new BroadcastDemoActivity());
+        demoActivities.add(new DatabaseDemoActivity());
 
         for (DemoActivity activity: demoActivities) {
             mDemoMap.put(activity.getDemoTitle(), activity);
