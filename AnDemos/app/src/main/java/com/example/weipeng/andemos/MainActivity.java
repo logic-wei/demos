@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weipeng.andemos.BroadcastDemo.BroadcastDemoActivity;
+import com.example.weipeng.andemos.Camera1Demo.Camera1DemoActivity;
 import com.example.weipeng.andemos.DatabaseDemo.DatabaseDemoActivity;
 import com.example.weipeng.andemos.ServiceDemo.ServiceDemoActivity;
 
@@ -24,6 +26,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     private RecyclerView mRView;
     private RViewAdapter mRVAdapter;
@@ -32,9 +35,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
         setContentView(R.layout.activity_main);
         initDemoMap();
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
     }
 
     private void initDemoMap() {
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         demoActivities.add(new ServiceDemoActivity());
         demoActivities.add(new BroadcastDemoActivity());
         demoActivities.add(new DatabaseDemoActivity());
+        demoActivities.add(new Camera1DemoActivity());
 
         for (DemoActivity activity: demoActivities) {
             mDemoMap.put(activity.getDemoTitle(), activity);

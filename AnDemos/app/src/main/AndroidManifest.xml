@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.weipeng.andemos">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,9 +32,13 @@
 
         <activity
             android:name=".BroadcastDemo.BroadcastDemoActivity"
-            android:label="@string/title_activity_broadcast_demo"></activity>
-
+            android:label="@string/title_activity_broadcast_demo" />
         <activity android:name=".DatabaseDemo.DatabaseDemoActivity">
+        </activity>
+        <activity
+            android:name=".Camera1Demo.Camera1DemoActivity"
+            android:label="@string/title_activity_camera1_demo">
+
         </activity>
     </application>
 
