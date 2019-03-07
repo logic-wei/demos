@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_camera1_setting"
+    android:background="@color/transWhite"
+    android:visibility="gone">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="白平衡："/>
+        <TextView
+            android:id="@+id/text_wb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="wb" />
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seek_wb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:min="0"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="对焦："/>
+        <TextView
+            android:id="@+id/text_focus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="focus" />
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seek_focus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:min="0"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="曝光补偿："/>
+        <TextView
+            android:id="@+id/text_exposure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="exposure" />
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seek_exposure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:min="0"/>
+
+</LinearLayout>

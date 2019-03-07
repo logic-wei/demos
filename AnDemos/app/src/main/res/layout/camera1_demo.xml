@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/black">
 
     <FrameLayout
         android:id="@+id/layout_preview"
@@ -18,4 +19,15 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="拍照" />
+
+    <ToggleButton
+        android:id="@+id/button_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button_shutter"
+        android:layout_toStartOf="@+id/button_shutter"
+        android:textOff="设置"
+        android:textOn="设置" />
+
+    <include layout="@layout/camera1_setting" />
 </RelativeLayout>

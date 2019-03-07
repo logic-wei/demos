@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="itemTextMain">#000000</color>
     <color name="itemTextSub">#505050</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transWhite">#80FFFFFF</color>
 </resources>

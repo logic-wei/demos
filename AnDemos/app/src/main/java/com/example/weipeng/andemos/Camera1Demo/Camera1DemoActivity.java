@@ -1,10 +1,14 @@
 package com.example.weipeng.andemos.Camera1Demo;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.Nullable;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
@@ -16,12 +20,23 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.weipeng.andemos.DemoActivity;
 import com.example.weipeng.andemos.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.Format;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +48,14 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
     Button mShutterButton;
     FrameLayout mPreviewLayout;
     SurfaceView mPreviewView;
+    ToggleButton mSettingButton;
+    TextView mWBText;
+    TextView mFocusText;
+    TextView mExposureText;
+    SeekBar mWBSeek;
+    SeekBar mFocusSeek;
+    SeekBar mExposureSeek;
+    View mSettingView;
 
     //camera
     Camera mCamera;
@@ -41,6 +64,8 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
     //others
     HandlerThread mCameraHandlerThread;
     Handler mCameraHandler;
+    HandlerThread mSaveHandlerThread;
+    Handler mSaveHandler;
 
     @Override
     public String getDemoTitle() {
@@ -57,8 +82,11 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
         mCameraHandlerThread = new HandlerThread("CameraHandlerThread");
+        mSaveHandlerThread = new HandlerThread("SaveHandlerThread");
         mCameraHandlerThread.start();
+        mSaveHandlerThread.start();
         mCameraHandler = new Handler(mCameraHandlerThread.getLooper());
+        mSaveHandler = new Handler(mSaveHandlerThread.getLooper());
         setContentView(R.layout.camera1_demo);
         initViews();
     }
@@ -71,11 +99,155 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
         mPreviewView = new SurfaceView(this);
         mPreviewLayout.addView(mPreviewView);
         mPreviewView.getHolder().addCallback(this);
+
+        // setting ui
+        mSettingButton = findViewById(R.id.button_setting);
+        mWBText = findViewById(R.id.text_wb);
+        mFocusText = findViewById(R.id.text_focus);
+        mExposureText = findViewById(R.id.text_exposure);
+        mWBSeek = findViewById(R.id.seek_wb);
+        mFocusSeek = findViewById(R.id.seek_focus);
+        mExposureSeek = findViewById(R.id.seek_exposure);
+        mSettingView = findViewById(R.id.layout_camera1_setting);
+
+        mSettingButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mSettingView.setVisibility(isChecked ? View.VISIBLE: View.GONE);
+            }
+        });
+
+        SeekBar.OnSeekBarChangeListener onSettingChangeListener = new OnSettingSeekBarChangedListener();
+        mWBSeek.setOnSeekBarChangeListener(onSettingChangeListener);
+        mFocusSeek.setOnSeekBarChangeListener(onSettingChangeListener);
+        mExposureSeek.setOnSeekBarChangeListener(onSettingChangeListener);
+    }
+
+    private class OnSettingSeekBarChangedListener implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser) {
+            switch (seekBar.getId()) {
+                case R.id.seek_wb:
+                    mCameraHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String result = setWB(progress);
+                            updateSetting();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWBText.setText(result);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case R.id.seek_focus:
+                    mCameraHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String result = setFocus(progress);
+                            updateSetting();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFocusText.setText(result);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case R.id.seek_exposure:
+                    mCameraHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String result = setExposure(progress);
+                            updateSetting();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mExposureText.setText(result);
+                                }
+                            });
+                        }
+                    });
+                    break;
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
     }
 
     class ShutterClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            mCameraHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mCamera == null)
+                        return;
+                    try {
+                        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                            @Override
+                            public void onAutoFocus(boolean success, Camera camera) {
+                                if (success)
+                                    mCamera.takePicture(null, null, new JpegPictureCallback());
+                                else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getBaseContext(), "failed to focus", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                }
+            });
+        }
+    }
+
+    class JpegPictureCallback implements Camera.PictureCallback {
+        @Override
+        public void onPictureTaken(final byte[] data, Camera camera) {
+            mSaveHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        File parent = getExternalFilesDir("photo");//getFilesDir();
+                        final File name = new File(parent.getAbsolutePath(), String.format(Locale.getDefault(), "pic-%d.jpeg", Calendar.getInstance().getTime().getTime()));
+                        Log.i(TAG, "pic path="+name.getAbsolutePath());
+                        if (!name.exists()) {
+                            if (!name.createNewFile()) {
+                                Log.e(TAG, "failed to create file");
+                                return;
+                            }
+                        }
+                        FileOutputStream outputStream = new FileOutputStream(name);
+                        outputStream.write(data);
+                        outputStream.close();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getBaseContext(), "picture is taken:"+name.getPath(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.i(TAG, e.toString());
+                    }
+                }
+            });
         }
     }
 
@@ -91,6 +263,7 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
                     mParameters = mCamera.getParameters();
                     mCamera.setDisplayOrientation(90);
                     setMaxPreviewSize();
+                    setMaxPictureSize();
                     updateSetting();
                     final Camera.Size size = mParameters.getPreviewSize();
                     Log.i(TAG, String.format(Locale.getDefault(), "set preview size:w=%d h=%d", size.width, size.height));
@@ -174,15 +347,22 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
     private void setOptimalPreviewSize(int w, int h) {
         List<Camera.Size> sizes = mParameters.getSupportedPreviewSizes();
         Camera.Size sizeSelected = sizes.get(getOptimalSizeIndex(sizes, w, h));
-        Log.i(TAG, String.format(Locale.getDefault(), "selected size:%d * %d", sizeSelected.width, sizeSelected.height));
+        Log.i(TAG, String.format(Locale.getDefault(), "selected preview size:%d * %d", sizeSelected.width, sizeSelected.height));
         mParameters.setPreviewSize(sizeSelected.width, sizeSelected.height);
     }
 
     private void setMaxPreviewSize() {
         List<Camera.Size> sizes = mParameters.getSupportedPreviewSizes();
         Camera.Size sizeSelected = sizes.get(getMaxSizeIndex(sizes));
-        Log.i(TAG, String.format(Locale.getDefault(), "selected size:%d * %d", sizeSelected.width, sizeSelected.height));
+        Log.i(TAG, String.format(Locale.getDefault(), "selected preview size:%d * %d", sizeSelected.width, sizeSelected.height));
         mParameters.setPreviewSize(sizeSelected.width, sizeSelected.height);
+    }
+
+    private void setMaxPictureSize() {
+        List<Camera.Size> sizes = mParameters.getSupportedPictureSizes();
+        Camera.Size sizeSelected = sizes.get(getMaxSizeIndex(sizes));
+        Log.i(TAG, String.format(Locale.getDefault(), "selected picture size:%d * %d", sizeSelected.width, sizeSelected.height));
+        mParameters.setPictureSize(sizeSelected.width, sizeSelected.height);
     }
 
     private int getMaxSizeIndex(List<Camera.Size> sizes) {
@@ -250,5 +430,38 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
         display.getMetrics(metrics);
 
         return metrics;
+    }
+
+    static private int percentScaleTo(int percent, int targetRangeMin, int targetRangeMax) {
+        int targetRange = targetRangeMax - targetRangeMin;
+        int result = (int) ((float) percent * (float) targetRange / 100f) + targetRangeMin;
+
+        if (result > targetRange)
+            result = targetRange;
+
+        return result;
+    }
+
+    private String setWB(int value) {
+        List<String> supported = mParameters.getSupportedWhiteBalance();
+        String result = supported.get(percentScaleTo(value, 0, supported.size() - 1));
+        mParameters.setWhiteBalance(result);
+
+        return result;
+    }
+
+    private String setFocus(int value) {
+        List<String> supported = mParameters.getSupportedFocusModes();
+        String result = supported.get(percentScaleTo(value, 0, supported.size() - 1));
+        mParameters.setFocusMode(result);
+
+        return result;
+    }
+
+    private String setExposure(int value) {
+        int result = percentScaleTo(value,
+                mParameters.getMinExposureCompensation(), mParameters.getMaxExposureCompensation());
+        mParameters.setExposureCompensation(result);
+        return "" + result;
     }
 }
