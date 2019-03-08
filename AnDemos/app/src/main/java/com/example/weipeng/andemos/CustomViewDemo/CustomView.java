@@ -14,6 +14,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 
+@Deprecated
 public class CustomView extends View {
 
     Paint mPaint = new Paint();

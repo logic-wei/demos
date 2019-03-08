@@ -5,6 +5,12 @@
     <com.example.weipeng.andemos.CustomViewDemo.CustomView
         android:id="@+id/view_custom"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <com.example.weipeng.andemos.CustomViewDemo.BreathButton
+        android:id="@+id/view_breath"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 </RelativeLayout>

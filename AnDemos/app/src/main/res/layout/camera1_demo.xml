@@ -21,10 +21,10 @@
         android:text="拍照"
         android:visibility="gone"/>
 
-    <com.example.weipeng.andemos.CustomViewDemo.CustomView
+    <com.example.weipeng.andemos.CustomViewDemo.BreathButton
         android:id="@+id/button_custom_shutter"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp" />

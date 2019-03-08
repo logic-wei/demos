@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.weipeng.andemos.CustomViewDemo.BreathButton;
 import com.example.weipeng.andemos.CustomViewDemo.CustomView;
 import com.example.weipeng.andemos.DemoActivity;
 import com.example.weipeng.andemos.R;
@@ -59,7 +60,7 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
     SeekBar mFocusSeek;
     SeekBar mExposureSeek;
     View mSettingView;
-    CustomView mCustomView;
+    BreathButton mCustomView;
 
     //camera
     Camera mCamera;
@@ -129,8 +130,9 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
         // 自定义shutter button示例
         mCustomView = findViewById(R.id.button_custom_shutter);
         mCustomView.setColor(Color.BLUE);
-        mCustomView.setRadius(100);
-        mCustomView.setRadiusOverlay(40);
+        mCustomView.setBiggerBaseRadius(140);
+        mCustomView.setSmallerBaseRadius(100);
+        mCustomView.setBreathRange(10);
         mCustomView.setOnClickListener(new Camera1DemoActivity.ShutterClickListener());
     }
 

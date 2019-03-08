@@ -10,6 +10,7 @@ import com.example.weipeng.andemos.R;
 public class CustomViewDemoActivity extends DemoActivity {
 
     CustomView mCustomView;
+    BreathButton mBreathButton;
 
     @Override
     public String getDemoTitle() {
@@ -29,5 +30,11 @@ public class CustomViewDemoActivity extends DemoActivity {
         mCustomView.setColor(Color.GRAY);
         mCustomView.setRadius(200);
         mCustomView.setRadiusOverlay(100);
+
+        mBreathButton = findViewById(R.id.view_breath);
+        mBreathButton.setColor(Color.LTGRAY);
+        mBreathButton.setBiggerBaseRadius(250);
+        mBreathButton.setSmallerBaseRadius(120);
+        mBreathButton.setBreathRange(30);
     }
 }
