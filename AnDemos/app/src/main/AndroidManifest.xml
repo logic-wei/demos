@@ -43,6 +43,8 @@
             android:label="@string/title_activity_camera1_demo">
 
         </activity>
+        <activity android:name=".CustomViewDemo.CustomViewDemoActivity">
+        </activity>
     </application>
 
 </manifest>

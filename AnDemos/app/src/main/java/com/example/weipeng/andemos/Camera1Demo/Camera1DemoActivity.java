@@ -2,12 +2,14 @@ package com.example.weipeng.andemos.Camera1Demo;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.weipeng.andemos.CustomViewDemo.CustomView;
 import com.example.weipeng.andemos.DemoActivity;
 import com.example.weipeng.andemos.R;
 
@@ -56,6 +59,7 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
     SeekBar mFocusSeek;
     SeekBar mExposureSeek;
     View mSettingView;
+    CustomView mCustomView;
 
     //camera
     Camera mCamera;
@@ -121,6 +125,13 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
         mWBSeek.setOnSeekBarChangeListener(onSettingChangeListener);
         mFocusSeek.setOnSeekBarChangeListener(onSettingChangeListener);
         mExposureSeek.setOnSeekBarChangeListener(onSettingChangeListener);
+
+        // 自定义shutter button示例
+        mCustomView = findViewById(R.id.button_custom_shutter);
+        mCustomView.setColor(Color.BLUE);
+        mCustomView.setRadius(100);
+        mCustomView.setRadiusOverlay(40);
+        mCustomView.setOnClickListener(new Camera1DemoActivity.ShutterClickListener());
     }
 
     private class OnSettingSeekBarChangedListener implements SeekBar.OnSeekBarChangeListener {
@@ -240,7 +251,8 @@ public class Camera1DemoActivity extends DemoActivity implements SurfaceHolder.C
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getBaseContext(), "picture is taken:"+name.getPath(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getBaseContext(), "picture is taken:"+name.getPath(), Toast.LENGTH_SHORT).show();
+                                Snackbar.make(mPreviewLayout, "picture is taken:"+name.getPath(), 1000).show();
                             }
                         });
                     } catch (Exception e) {

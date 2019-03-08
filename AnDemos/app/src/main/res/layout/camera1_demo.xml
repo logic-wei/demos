@@ -18,14 +18,23 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="拍照" />
+        android:text="拍照"
+        android:visibility="gone"/>
+
+    <com.example.weipeng.andemos.CustomViewDemo.CustomView
+        android:id="@+id/button_custom_shutter"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp" />
 
     <ToggleButton
         android:id="@+id/button_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/button_shutter"
-        android:layout_toStartOf="@+id/button_shutter"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:textOff="设置"
         android:textOn="设置" />
 

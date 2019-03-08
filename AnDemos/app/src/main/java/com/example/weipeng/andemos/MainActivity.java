@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.weipeng.andemos.BroadcastDemo.BroadcastDemoActivity;
 import com.example.weipeng.andemos.Camera1Demo.Camera1DemoActivity;
+import com.example.weipeng.andemos.CustomViewDemo.CustomViewDemoActivity;
 import com.example.weipeng.andemos.DatabaseDemo.DatabaseDemoActivity;
 import com.example.weipeng.andemos.ServiceDemo.ServiceDemoActivity;
 
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         demoActivities.add(new BroadcastDemoActivity());
         demoActivities.add(new DatabaseDemoActivity());
         demoActivities.add(new Camera1DemoActivity());
+        demoActivities.add(new CustomViewDemoActivity());
 
         for (DemoActivity activity: demoActivities) {
             mDemoMap.put(activity.getDemoTitle(), activity);
